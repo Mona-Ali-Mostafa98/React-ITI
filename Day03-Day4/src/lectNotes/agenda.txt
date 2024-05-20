@@ -1,0 +1,9 @@
+1- Routing -- React-router-dom 6.4
+
+npm i react-router-dom@6.4
+
+2- Install json-server
+
+3- Connect With API --> Axois 
+
+4- implement Crud Operation
