@@ -1,32 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { addNewBook, editBook, getBooksById } from "../api/bookApi";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { addNewBook, editBook } from "../api/bookApi";
+import { Link, useNavigate, useParams, useLoaderData } from "react-router-dom";
 
 export function BookForm() {
-  const [book, setBook] = useState({
-    title: "",
-    description: "",
-  });
-
+  const loadedBook = useLoaderData();
+  const [book, setBook] = useState(loadedBook);
   const [errors, setErrors] = useState({});
-
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (id !== '0') {
-      const fetchData = async () => {
-        try {
-          const response = await getBooksById(id);
-          setBook(response.data);
-        } catch (error) {
-          console.error("Failed to fetch book:", error);
-        }
-      };
-      fetchData();
+      setBook(loadedBook);
     }
-  }, [id]);
+  }, [id, loadedBook]);
 
   const changeHandler = (e) => {
     setBook({
@@ -80,7 +68,7 @@ export function BookForm() {
         <div className="col">
           <div className="mt-5 card shadow mb-4">
             <div className="card-header py-3">
-            <div className="row justify-content-between align-items-center">
+              <div className="row justify-content-between align-items-center">
                 <h4 className="col text-primary">{id === '0' ? "Add New Book" : "Edit Book"}</h4>
                 <div className="col-2 text-center">
                   <Link to="/books" className="btn btn-outline-primary">

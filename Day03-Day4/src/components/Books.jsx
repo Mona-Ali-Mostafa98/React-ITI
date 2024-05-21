@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Modal, Button } from "react-bootstrap";
 import { Link, useLoaderData } from "react-router-dom";
 
-import { deleteBook, getAllBooks } from "../api/bookApi";
+import { deleteBook } from "../api/bookApi";
 
 export function Books() {
   const { data } = useLoaderData();
