@@ -1,24 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { addNewBook, editBook } from "../api/bookApi";
-import { Link, useNavigate, useParams, useLoaderData } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBookById, createBook, updateBook } from "../store/bookSlice";
 
 export function BookForm() {
-  const loadedBook = useLoaderData();
-  const [book, setBook] = useState(loadedBook);
-  const [errors, setErrors] = useState({});
+  const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
+  const book = useSelector((state) => state.books.book);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    description: ""
+  });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (id !== '0') {
-      setBook(loadedBook);
+      dispatch(fetchBookById(id));
     }
-  }, [id, loadedBook]);
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (id !== '0' && book) {
+      setFormData({
+        title: book.title || "",
+        description: book.description || "",
+      });
+    }
+  }, [id, book]);
 
   const changeHandler = (e) => {
-    setBook({
-      ...book,
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value,
     });
 
@@ -32,12 +47,12 @@ export function BookForm() {
     let errors = {};
     let isValid = true;
 
-    if (book.title.length < 2) {
+    if (formData.title.length < 2) {
       errors.title = "Title must be at least 2 characters long";
       isValid = false;
     }
 
-    if (book.description.length < 10) {
+    if (formData.description.length < 10) {
       errors.description = "Description must be at least 10 characters long";
       isValid = false;
     }
@@ -51,9 +66,9 @@ export function BookForm() {
     if (validateForm()) {
       try {
         if (id === '0') {
-          await addNewBook(book);
+          await dispatch(createBook(formData)); // Dispatch createBook action
         } else {
-          await editBook(book, id);
+          await dispatch(updateBook({ id, book: formData })); // Dispatch updateBook action
         }
         navigate("/books");
       } catch (error) {
@@ -85,7 +100,7 @@ export function BookForm() {
                     placeholder="Enter Book Title"
                     type="text"
                     name="title"
-                    value={book.title}
+                    value={formData.title || ""}
                     onChange={changeHandler}
                     isInvalid={!!errors.title}
                   />
@@ -100,7 +115,7 @@ export function BookForm() {
                     as="textarea"
                     placeholder="Enter Description"
                     name="description"
-                    value={book.description}
+                    value={formData.description || ""}
                     onChange={changeHandler}
                     isInvalid={!!errors.description}
                   />
@@ -111,12 +126,13 @@ export function BookForm() {
 
                 <Button variant="dark" type="submit">
                   {id === '0' ? "Add New Book" : "Edit Book"}
-                </Button>
-              </Form>
+                  </Button>
+                </Form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+  

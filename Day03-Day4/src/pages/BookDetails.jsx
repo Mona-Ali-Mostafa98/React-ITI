@@ -1,8 +1,27 @@
-import React from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchBookById } from "../store/bookSlice";
 
 export function BookDetails() {
-  const book = useLoaderData();
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const book = useSelector((state) => state.books.book);
+  const status = useSelector((state) => state.books.status);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchBookById(id));
+    }
+  }, [dispatch, id]);
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (!book) {
+    return <div>Book not found</div>;
+  }
 
   return (
     <div className="container">
@@ -20,10 +39,9 @@ export function BookDetails() {
               </div>
             </div>
             <div className="card-body p-5">
-              <p className="lead"><strong>ID:</strong> {book.id}
-              </p>
+              <p className="lead"><strong>ID:</strong> {book.id}</p>
               <p className="lead"><strong>Title:</strong> {book.title}</p>
-              <p className="lead "><strong>Description: </strong> {book.description}</p>
+              <p className="lead"><strong>Description: </strong> {book.description}</p>
             </div>
           </div>
         </div>
