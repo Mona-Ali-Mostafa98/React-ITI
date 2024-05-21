@@ -16,7 +16,17 @@ code {
 #root{
   min-height: 100vh;
 
-	background: #b4f4ff;
-	background: -webkit-linear-gradient(to right, #d1b3fd, #b4f4ff);
-	background: linear-gradient(to right, #d1b3fd, #b4f4ff);
+	background: #dcfaff;
+	background: -webkit-linear-gradient(to right, #e2d1fc, #dcfaff);
+	background: linear-gradient(to right, #e2d1fc, #dcfaff);
+}
+
+img {
+	height: 250px;
+	object-fit: cover;
+}
+
+.carousel-item img{
+  height: 80vh;
+  object-fit:fill;
 }
