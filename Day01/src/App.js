@@ -1,13 +1,21 @@
+import logo from './logo.svg';
 import './App.css';
-import NavbarComponent from './components/navbar';
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle";
-function App() {
-  return (
-    <>
-      <NavbarComponent/>
-    </>
-  );
+import Header from './components/Header';
+import Products from './components/products/Products';
+import Slider from './components/Slider';
+import Footer from './components/Footer';
+
+export function App() {
+	return (
+		<>
+
+
+			<Header />
+			<Slider />
+			<Products />
+			<Footer/>
+		</>
+	);
 }
 
-export default App;
+export default App ;
